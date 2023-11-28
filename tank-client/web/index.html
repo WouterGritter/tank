@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+    <title>Tank</title>
+    <script>
+        let lastCommand = '';
+
+        function getSpeed() {
+            return parseInt(document.getElementById('speed').value);
+        }
+
+        function setDirection(aDir, bDir) {
+            const speed = getSpeed();
+            const aSpeed = Math.floor(aDir * speed);
+            const bSpeed = Math.floor(bDir * speed);
+
+            const command = `/update/${aSpeed}/${bSpeed}`;
+            if (command !== lastCommand) {
+                lastCommand = command;
+
+                fetch(command)
+                    .then(res => console.log('ok'))
+                    .catch(err => console.log('err'));
+            }
+        }
+
+        document.onkeyup = function (event) {
+            setDirection(0, 0);
+        }
+
+        document.onkeydown = function (event) {
+            switch (event.keyCode) {
+                case 32:
+                    // STOP
+                    setDirection(0, 0);
+                    break;
+                case 38:
+                    // UP
+                    setDirection(1, 1);
+                    break;
+                case 40:
+                    // DOWN
+                    setDirection(-1, -1);
+                    break;
+                case 37:
+                    // LEFT
+                    setDirection(0.5, -0.5);
+                    break;
+                case 39:
+                    // RIGHT
+                    setDirection(-0.5, 0.5);
+                    break;
+            }
+        };
+    </script>
+</head>
+<body>
+<p>Press the left, right, up and down arrow keys for control (space for stop).</p>
+<input type="range" min="0" max="100" step="1" id="speed">
+</body>
+</html>
